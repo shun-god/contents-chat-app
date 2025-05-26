@@ -14,19 +14,25 @@ const theme = createTheme({
   },
 });
 
+// ページコンポーネントのインポート
 import Index from "@/pages/index.tsx";
+import WorksPage from "@/pages/WorksPage.tsx"; // 新しいWorksPageをインポート
 
+// ルーティングの設定
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Index />,
     errorElement: <div>404 Not Found</div>,
   },
+  {
+    path: "/works", // 新しいルート
+    element: <WorksPage />, // WorksPageを対応させる
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    // Appコンポーネント内
     <ThemeProvider theme={theme}>
       <RouterProvider router={router} />
     </ThemeProvider>
