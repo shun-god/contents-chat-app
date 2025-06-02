@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ... existing .gitignore content ...
+.env
+*.env
+.env.*

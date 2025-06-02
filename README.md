@@ -10,24 +10,21 @@ React + TypeScript + Vite を使用した開発のためのテンプレートリ
 - **TypeScript** - 静的型付け
 - **Vite** - 高速な開発環境とビルドツール ([公式サイト](https://ja.vitejs.dev/))
 - **React Router** - ページナビゲーション ([チュートリアル](https://reactrouter.com/en/main/start/tutorial))
+- **Material UI (MUI)** - UIコンポーネントライブラリ ([公式サイト](https://mui.com/))
 
 ## 始め方
+
+### 前提条件
+
+- [Node.js](https://nodejs.org/) (LTS版を推奨)
+- [npm](https://www.npmjs.com/) (Node.jsに同梱) または [yarn](https://yarnpkg.com/)
+- [Git](https://git-scm.com/)
 
 ### リポジトリのクローン
 
 ```bash
-git clone git@github.com:Buntamatsushita/ts-react-template.git
+git clone https://github.com/Buntamatsushita/ts-react-template.git
 cd ts-react-template
-```
-
-### Node.js バージョン管理
-
-このプロジェクトでは [Volta](https://docs.volta.sh/guide/) を使用してNode.jsのバージョンを管理することをお勧めします。
-
-```bash
-# Voltaをインストールしていない場合はインストールしてください
-# Voltaで特定のNodeバージョンをインストール
-volta install node@20.12.2
 ```
 
 ### 依存関係のインストールと開発サーバーの起動
@@ -35,35 +32,103 @@ volta install node@20.12.2
 ```bash
 # 依存関係のインストール
 npm install
-# または、厳密なバージョン一致でインストール
-npm ci
+# または、yarn を使用する場合
+# yarn install
 
 # 開発サーバーの起動
 npm run dev
+# または、yarn を使用する場合
+# yarn dev
 ```
 
-開発サーバーが起動したら、ブラウザで `http://localhost:5173` にアクセスしてアプリケーションを確認できます。
+開発サーバーが起動したら、ブラウザで `http://localhost:5173` (Viteのデフォルトポート) にアクセスしてアプリケーションを確認できます。
 
-## ライブラリの追加
+## 主な設定ファイル
 
-### Material UI (MUI) のインストール
+- `vite.config.ts`: Viteの設定ファイル。プラグインの追加やビルドオプションのカスタマイズが可能です。
+- `tsconfig.json`: TypeScriptのコンパイラオプションを設定します。
+- `package.json`: プロジェクトの依存関係やスクリプトを定義します。
+- `.eslintrc.cjs`: ESLintの設定ファイル。コードの静的解析ルールを定義します。
 
-UIコンポーネントライブラリとして [Material UI (MUI)](https://mui.com/) を追加する例：
+## ディレクトリ構成
+
+```
+.
+├── public/          # 静的アセット (ビルド時にそのままコピーされる)
+├── src/
+│   ├── assets/      # 画像などのアセット
+│   ├── components/  # 再利用可能なReactコンポーネント
+│   ├── pages/       # 各ページのコンポーネント
+│   ├── types/       # TypeScriptの型定義
+│   ├── App.tsx      # アプリケーションのルートコンポーネント (ルーティング設定など)
+│   └── main.tsx     # アプリケーションのエントリーポイント
+├── index.html       # HTMLのテンプレート
+├── package.json
+├── README.md        # このファイル
+└── vite.config.ts
+```
+
+## スクリプト
+
+- `npm run dev`: 開発モードでViteサーバーを起動します。
+- `npm run build`: 本番用にプロジェクトをビルドします (`dist` フォルダに出力)。
+- `npm run lint`: ESLintを実行してコードの静的解析を行います。
+- `npm run preview`: ビルド成果物をローカルでプレビューします。
+
+## ライブラリ
+
+このテンプレートには、以下の主要なライブラリが事前に導入されています。
+
+- **@mui/material**: Material Design に準拠したUIコンポーネントを提供します。
+- **@emotion/react**, **@emotion/styled**: CSS-in-JS ライブラリで、MUIのスタイリングに使用されます。
+- **react-router-dom**: クライアントサイドルーティングを実現します。
+- **notistack**: 通知（スナックバー）を簡単に表示するためのライブラリです。
+- **uuid**: UUIDを生成するためのライブラリです。
+
+### ライブラリの追加例 (MUI)
+
+Material UI は既に `package.json` に含まれていますが、手動でインストールする場合は以下のコマンドを実行します。
 
 ```bash
-# MUI コアパッケージと関連パッケージのインストール
-npm install @mui/material @emotion/react @emotion/styled
-
-# アイコン（オプション）
-npm install @mui/icons-material
-
-# または一括インストール
 npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
 ```
 
-#### MUIの使い方の例
+#### MUIの基本的な使い方
 
-`src/pages/index.tsx` ファイルでMUIコンポーネントを使用する簡単な例：
+`src/main.tsx` でテーマプロバイダーを設定し、各コンポーネントでMUIのコンポーネントを利用できます。
+
+```tsx
+// src/main.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css'; // 必要に応じてグローバルCSSをインポート
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+// カスタムテーマの定義 (任意)
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2', // 例: 青系のプライマリカラー
+    },
+    secondary: {
+      main: '#dc004e', // 例: ピンク系のセカンダリカラー
+    },
+  },
+});
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <CssBaseline /> {/* MUIのベースラインCSSを適用 */}
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+```
+
+コンポーネントでの使用例 (`src/pages/HomePage.tsx` など):
 
 ```tsx
 import { Button, Typography, Container, Box } from '@mui/material';
@@ -71,12 +136,12 @@ import { Button, Typography, Container, Box } from '@mui/material';
 function HomePage() {
   return (
     <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
+      <Box sx={{ my: 4, textAlign: 'center' }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Material UI サンプル
+          ようこそ！
         </Typography>
         <Button variant="contained" color="primary">
-          クリックしてください
+          はじめる
         </Button>
       </Box>
     </Container>
@@ -86,55 +151,10 @@ function HomePage() {
 export default HomePage;
 ```
 
-テーマのカスタマイズ (`src/main.tsx` に追加):
+## コントリビューション
 
-```tsx
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+バグ報告や機能改善のプルリクエストを歓迎します。
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#556cd6',
-    },
-    secondary: {
-      main: '#19857b',
-    },
-  },
-});
+## ライセンス
 
-// Appコンポーネント内
-<ThemeProvider theme={theme}>
-  {/* アプリケーションの内容 */}
-</ThemeProvider>
-```
-
-## 推奨VSCode拡張機能
-
-このプロジェクトでの開発を効率化するために、以下のVSCode拡張機能をインストールすることをお勧めします：
-
-- **Japanese Language Pack for Visual Studio Code** - VS Codeの日本語化
-- **ESLint** - コード品質のチェック
-- **IntelliCode** - AIによるコード補完
-- **Trailing Spaces** - 余分な空白の検出
-- **Prettier - Code formatter** - コードフォーマット
-- **npm Intellisense** - npmモジュールのインポート補完
-- **JavaScript and TypeScript Nightly** - 最新のJS/TS機能サポート
-- **vscode-styled-components** - styled-componentsのシンタックスハイライト
-
-## プロジェクト構成
-
-```
-ts-react-template/
-├── public/           # 静的ファイル
-├── src/
-│   ├── assets/       # 画像などのアセット
-│   ├── components/   # 再利用可能なコンポーネント
-│   ├── pages/        # ページコンポーネント
-│   ├── main.tsx      # アプリケーションのエントリポイント
-│   └── vite-env.d.ts # Viteの型定義
-├── index.html        # HTMLテンプレート
-├── package.json      # 依存関係と設定
-├── tsconfig.json     # TypeScript設定
-├── vite.config.ts    # Vite設定
-└── README.md         # 本ドキュメント
-```
+このプロジェクトは [MIT License](LICENSE) のもとで公開されています。

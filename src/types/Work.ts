@@ -1,7 +1,13 @@
-export const workCategories = ['書籍', 'Web小説', '漫画', '映画', 'その他'] as const;
+export const workCategories = [
+  "書籍",
+  "Web小説",
+  "漫画",
+  "映画",
+  "その他",
+] as const;
 
 // workCategories 配列の要素の型を生成 (例: '書籍' | 'Web小説' | ...)
-export type WorkCategory = typeof workCategories[number];
+export type WorkCategory = (typeof workCategories)[number];
 
 export interface Work {
   id: string; // 一意なID (例えばUUID)

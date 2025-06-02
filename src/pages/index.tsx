@@ -1,27 +1,38 @@
-import { useState } from "react";
-import styled from "styled-components";
+import React from 'react';
+import { Box, Typography, Button, Container, Paper } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import BookIcon from '@mui/icons-material/Book';
 
-export default function Index() {
-  const [count, setCount] = useState(0);
-
+const IndexPage: React.FC = () => {
   return (
-    <>
-      <h1>Hi This is Index Page</h1>
-      <p>times: {count}</p>
-      <Wrapper onClick={() => setCount((count) => count + 1)}>Styled Component</Wrapper>
-    </>
-  );
-}
+    <Container maxWidth="md" sx={{ mt: { xs: 2, md: 8 }, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 }, textAlign: 'center' }}>
+        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+          ようこそ！
+        </Typography>
+        <Typography variant="h6" color="text.secondary" paragraph sx={{ mb: 4 }}>
+          このアプリケーションでは、読んだ本や観た映画などの作品を記録し、
+          それらについて他の人と語り合うことができます。
+        </Typography>
 
-const Wrapper = styled.button`
-  color: white;
-  background-color: blue;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-  &:hover {
-    background-color: red;
-    color: blue;
-  }
-`;
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center', gap: 2 }}>
+          <Button
+            variant="contained"
+            size="large"
+            component={RouterLink}
+            to="/works"
+            startIcon={<BookIcon />}
+            sx={{ py: 1.5 }}
+          >
+            作品を管理する
+          </Button>
+        </Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 4 }}>
+          まずは作品を登録してみましょう！
+        </Typography>
+      </Paper>
+    </Container>
+  );
+};
+
+export default IndexPage;
